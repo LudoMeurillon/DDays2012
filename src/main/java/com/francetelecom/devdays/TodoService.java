@@ -4,6 +4,9 @@ import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -49,7 +52,13 @@ public class TodoService {
 		message.setTo(recipient);
 		message.setSubject(title);
 		message.setText(content);
-		mailSender.send(message);
+		try{
+			mailSender.send(message);
+		}catch (MailException e) {
+			LOGGER.error("Une erreur est survenue lors de l'envoi du mail",e);
+		}
 	}
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(TodoService.class);
 	
 }

@@ -25,6 +25,7 @@ public class TodoServiceTest {
 	
 	@Autowired
 	private TodoService todoService;
+	
 
 	@Test
 	public void testCreateAndReatrieveAFreshTodoList() throws Exception {
