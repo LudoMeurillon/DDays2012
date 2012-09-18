@@ -20,7 +20,7 @@ import com.francetelecom.devdays.domain.TodoList;
  * @author Ludovic Meurillon
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"classpath:/applicationContext.xml"})
+@ContextConfiguration(locations={"classpath:/applicationContext.xml","classpath:/applicationContext-mail-mock.xml"})
 public class TodoServiceTest {
 	
 	@Autowired

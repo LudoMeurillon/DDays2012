@@ -61,9 +61,4 @@
 	<!--Annotations-->
 	<context:annotation-config />
 	<context:component-scan base-package="com.francetelecom.devdays" />
-	
-	<bean class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value="smtp.test.com"></property>
-		<property name="port" value="549"></property>
-	</bean>
 </beans>
