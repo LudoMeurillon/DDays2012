@@ -32,10 +32,7 @@
 
 	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" p:dataSource-ref="datasource" p:persistenceUnitManager-ref="persistenceUnitManager">
 		<property name="jpaVendorAdapter">
-			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-				<property name="showSql" value="true"></property>
-				<property name="generateDdl" value="false"></property>
-			</bean>
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
 		</property>
 
 		<property name="jpaDialect">
@@ -48,8 +45,6 @@
 	        </props>
 	    </property>
 	</bean>
-	
-	<bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
 	
 	<tx:annotation-driven transaction-manager="transactionManager"/>
 
