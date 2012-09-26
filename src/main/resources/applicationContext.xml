@@ -12,8 +12,8 @@
 		
 	<bean id="datasource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
-		p:driverClassName="com.mysql.jdbc.Driver" p:url="jdbc:mysql://localhost:3306/mockito"
-		p:username="root" p:password="root" />
+		p:driverClassName="org.h2.Driver" p:url="jdbc:h2:mem:test;MODE=MySQL;DB_CLOSE_DELAY=-1 "
+		p:username="sa" p:password="" />
 	
 	<bean id="persistenceUnitManager"
 		class="org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager">
