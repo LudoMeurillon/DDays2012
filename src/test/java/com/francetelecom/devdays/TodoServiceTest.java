@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.ContextConfiguration;
@@ -69,6 +70,27 @@ public class TodoServiceTest {
 		verify(mailSender).send(any(SimpleMailMessage.class));
 	}
 
+	
+	
+	/**
+	 * Ce test valide que l'on peut créer une todolist même si le serveur de mail n'est pas joignable
+	 * (i.e.  l'API de {@link JavaMailSender} lève une exception de type {@link MailSendException}
+	 */
+	@Test
+	public void testIfWeCantSendEmailThatDoNotImpactBusinessService() throws Exception {
+		doThrow(new MailSendException("Server not found")).when(mailSender).send(any(SimpleMailMessage.class));
+		
+		TodoList newList = todoService.newList("malisteavecunmailenechec", "listowner@test.com");
+		TodoList myList = todoService.getTodoList("malisteavecunmailenechec");
+		
+		assertNotNull(myList);
+		assertEquals(newList.getName(),myList.getName());
+		
+		//On vérifie qu'on a tenté d'envoyer un mail (facultatif)
+		verify(mailSender).send(any(SimpleMailMessage.class));
+	}
+	
+	
 	
 	private static final SimpleDateFormat DATE_FORMAT	= new SimpleDateFormat("dd/MM/yyyy HH:mm");
 	
