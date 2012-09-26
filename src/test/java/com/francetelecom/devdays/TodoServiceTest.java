@@ -98,7 +98,9 @@ public class TodoServiceTest {
 	 */
 	@Test
 	public void testNewList() throws Exception {
+		//On court-circuite le fonctionnement de la méthode de notification pour tester uniquement newList(..)
 		doNothing().when(todoService).notifyOwner(anyString(), anyString(), anyString());
+		
 		//Action
 		TodoList newList = todoService.newList("masuperlistedetrucsafaire", "listowner@test.com");
 		
@@ -107,13 +109,8 @@ public class TodoServiceTest {
 		assertEquals("masuperlistedetrucsafaire", newList.getName());
 		assertEquals("listowner@test.com", newList.getOwnerEmail());
 		
-		/* On vérifie ici que le service a tenté d'envoyer un mail via le javaMailSender */
-		verify(mailSender).send(mailCaptor.capture());
-		//La capture du message permet de valider que le mail a bien été envoyé au bon destinataire
-		SimpleMailMessage emailSended = mailCaptor.getValue();
-		assertEquals("listowner@test.com",emailSended.getTo()[0]);
-		//On valide aussi que le contenu du mail contient bien le nom de la liste
-		assertTrue(emailSended.getText().contains("masuperlistedetrucsafaire"));
+		/* On vérifie ici que le service a tenté d'envoyer un mail via la méthode de notification  */
+		verify(todoService).notifyOwner(eq("listowner@test.com"), anyString(), contains("masuperlistedetrucsafaire"));
 		
 		/* Validation de la persistance de la liste vers la base de données */
 		verify(entityManager).persist(listeCaptor.capture()); 
