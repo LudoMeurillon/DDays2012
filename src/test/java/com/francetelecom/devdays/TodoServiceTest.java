@@ -50,6 +50,8 @@ public class TodoServiceTest {
 	 */
 	@Captor
 	private ArgumentCaptor<SimpleMailMessage> mailCaptor;
+	@Captor
+	private ArgumentCaptor<TodoList> listeCaptor;
 	
 	private TodoService todoService;
 	
@@ -94,10 +96,15 @@ public class TodoServiceTest {
 	 */
 	@Test
 	public void testNewList() throws Exception {
+		//Action
 		TodoList newList = todoService.newList("masuperlistedetrucsafaire", "listowner@test.com");
-		assertNotNull(newList);
 		
-		//On vérifie ici que le service a tenté d'envoyer un mail via le javaMailSender
+		//Tests
+		assertNotNull(newList);
+		assertEquals("masuperlistedetrucsafaire", newList.getName());
+		assertEquals("listowner@test.com", newList.getOwnerEmail());
+		
+		/* On vérifie ici que le service a tenté d'envoyer un mail via le javaMailSender */
 		verify(mailSender).send(mailCaptor.capture());
 		//La capture du message permet de valider que le mail a bien été envoyé au bon destinataire
 		SimpleMailMessage emailSended = mailCaptor.getValue();
@@ -105,7 +112,12 @@ public class TodoServiceTest {
 		//On valide aussi que le contenu du mail contient bien le nom de la liste
 		assertTrue(emailSended.getText().contains("masuperlistedetrucsafaire"));
 		
-		verify(entityManager).persist(newList); //Mockito se base sur le .equals pour valider le passage ici
+		/* Validation de la persistance de la liste vers la base de données */
+		verify(entityManager).persist(listeCaptor.capture()); 
+		//On valide ici le contenu de la liste envoyée à la base via JPA
+		assertEquals("masuperlistedetrucsafaire", listeCaptor.getValue().getName());
+		assertEquals("listowner@test.com", listeCaptor.getValue().getOwnerEmail());
+		assertTrue(listeCaptor.getValue().getTodos().isEmpty());
 	}
 	
 	/**
