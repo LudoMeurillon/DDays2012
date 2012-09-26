@@ -14,6 +14,8 @@ import javax.persistence.Query;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -41,6 +43,13 @@ public class TodoServiceTest {
 	private EntityManager entityManager;
 	@Mock
 	private Query findTodoListQuery;
+	
+	/**
+	 * Les {@link ArgumentCaptor} permettent de récupérer les valeurs 
+	 * qui ont été passées en paramètres d'appels aux mocks lors des tests
+	 */
+	@Captor
+	private ArgumentCaptor<SimpleMailMessage> mailCaptor;
 	
 	private TodoService todoService;
 	
@@ -89,7 +98,13 @@ public class TodoServiceTest {
 		assertNotNull(newList);
 		
 		//On vérifie ici que le service a tenté d'envoyer un mail via le javaMailSender
-		verify(mailSender).send(any(SimpleMailMessage.class));
+		verify(mailSender).send(mailCaptor.capture());
+		//La capture du message permet de valider que le mail a bien été envoyé au bon destinataire
+		SimpleMailMessage emailSended = mailCaptor.getValue();
+		assertEquals("listowner@test.com",emailSended.getTo()[0]);
+		//On valide aussi que le contenu du mail contient bien le nom de la liste
+		assertTrue(emailSended.getText().contains("masuperlistedetrucsafaire"));
+		
 		verify(entityManager).persist(newList); //Mockito se base sur le .equals pour valider le passage ici
 	}
 	
