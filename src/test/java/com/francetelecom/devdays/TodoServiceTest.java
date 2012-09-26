@@ -40,7 +40,7 @@ public class TodoServiceTest {
 	@Mock
 	private EntityManager entityManager;
 	@Mock
-	private Query query;
+	private Query findTodoListQuery;
 	
 	private TodoService todoService;
 	
@@ -53,11 +53,11 @@ public class TodoServiceTest {
 		
 		//Simulation du comportement de l'entityManager
 		//Si on lui demande de créer une requête il renvoie un Mock
-		when(entityManager.createQuery(anyString())).thenReturn(query);
+		when(entityManager.createQuery(matches("from "+TodoList.class.getSimpleName()+".*"))).thenReturn(findTodoListQuery);
 		
 		//Simulation du comportement de la requête
 		//Si on lui demande de changer un paramètre elle se renvoie elle même (cohérence du fonctionnement nominal)
-		when(query.setParameter(anyString(), any())).thenReturn(query);
+		when(findTodoListQuery.setParameter(eq("name"), any())).thenReturn(findTodoListQuery);
 	}
 
 	@Test
@@ -66,7 +66,7 @@ public class TodoServiceTest {
 		assertNotNull(newList);
 		
 		//Lorsque la base est intéroggée on retourne la liste
-		when(query.getSingleResult()).thenReturn(newList);
+		when(findTodoListQuery.getSingleResult()).thenReturn(newList);
 		
 		Task newTask = task("Faire les courses","faire les courses hebdo en prenant commande pour le drive", DATE_FORMAT.parse("12/10/2012 19:30"));
 		
@@ -94,7 +94,7 @@ public class TodoServiceTest {
 		TodoList newList = todoService.newList("malisteavecunmailenechec", "listowner@test.com");
 		
 		//Lorsque la base est intéroggée on retourne la liste
-		when(query.getSingleResult()).thenReturn(newList);
+		when(findTodoListQuery.getSingleResult()).thenReturn(newList);
 		
 		TodoList myList = todoService.getTodoList("malisteavecunmailenechec");
 		
