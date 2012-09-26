@@ -1,5 +1,6 @@
 package com.francetelecom.devdays.domain;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -21,7 +22,7 @@ public class TodoList {
 	private String ownerEmail;
 
 	@OneToMany(fetch=FetchType.EAGER)
-	private Set<Task> todos;
+	private Set<Task> todos = new HashSet<Task>();
 
 	public String getName() {
 		return name;

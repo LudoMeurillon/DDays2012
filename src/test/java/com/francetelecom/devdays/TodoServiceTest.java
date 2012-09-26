@@ -65,6 +65,9 @@ public class TodoServiceTest {
 		TodoList newList = todoService.newList("masuperlistedetrucsafaire", "listowner@test.com");
 		assertNotNull(newList);
 		
+		//Lorsque la base est intéroggée on retourne la liste
+		when(query.getSingleResult()).thenReturn(newList);
+		
 		Task newTask = task("Faire les courses","faire les courses hebdo en prenant commande pour le drive", DATE_FORMAT.parse("12/10/2012 19:30"));
 		
 		todoService.addTask(newList.getName(),newTask);
@@ -78,7 +81,6 @@ public class TodoServiceTest {
 		//On vérifie ici que le service a tenté d'envoyer un mail via le javaMailSender
 		verify(mailSender).send(any(SimpleMailMessage.class));
 	}
-
 	
 	
 	/**
@@ -90,6 +92,10 @@ public class TodoServiceTest {
 		doThrow(new MailSendException("Server not found")).when(mailSender).send(any(SimpleMailMessage.class));
 		
 		TodoList newList = todoService.newList("malisteavecunmailenechec", "listowner@test.com");
+		
+		//Lorsque la base est intéroggée on retourne la liste
+		when(query.getSingleResult()).thenReturn(newList);
+		
 		TodoList myList = todoService.getTodoList("malisteavecunmailenechec");
 		
 		assertNotNull(myList);
