@@ -21,8 +21,12 @@ public class TodoService {
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	@Autowired
 	private JavaMailSender mailSender;
+	
+	@Autowired
+	protected void setJavaMailSender(JavaMailSender mailSender){
+		this.mailSender = mailSender;
+	}
 
 	@Transactional
 	public TodoList getTodoList(String name) {
