@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -45,6 +46,13 @@ public class TodoServiceTest {
 	private Query findTodoListQuery;
 	
 	/**
+	 * L'injection des mocks dans une instance est prise en compte par Mockito si on le souhaite
+	 * @see InjectMocks
+	 */
+	@InjectMocks
+	private TodoService todoService = new TodoService();
+	
+	/**
 	 * Les {@link ArgumentCaptor} permettent de récupérer les valeurs 
 	 * qui ont été passées en paramètres d'appels aux mocks lors des tests
 	 */
@@ -53,15 +61,8 @@ public class TodoServiceTest {
 	@Captor
 	private ArgumentCaptor<TodoList> listeCaptor;
 	
-	private TodoService todoService;
-	
 	@Before
 	public void init(){
-		todoService = new TodoService();
-		//On met en place les Mock explicitement sur le Service testé
-		todoService.setJavaMailSender(mailSender);
-		todoService.setEntityManager(entityManager);
-		
 		//Simulation du comportement de l'entityManager
 		//Si on lui demande de créer une requête il renvoie un Mock
 		when(entityManager.createQuery(matches("from "+TodoList.class.getSimpleName()+".*"))).thenReturn(findTodoListQuery);
@@ -134,8 +135,6 @@ public class TodoServiceTest {
 		verify(mailSender).send(any(SimpleMailMessage.class));
 		verify(entityManager).persist(newList); //On valide ici que le système a tenté de persister l'objet
 	}
-	
-	
 	
 	private static final SimpleDateFormat DATE_FORMAT	= new SimpleDateFormat("dd/MM/yyyy HH:mm");
 	

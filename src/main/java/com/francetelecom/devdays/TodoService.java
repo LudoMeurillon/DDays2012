@@ -19,19 +19,11 @@ import com.francetelecom.devdays.domain.TodoList;
 @Service
 public class TodoService {
 
+	@PersistenceContext
 	private EntityManager entityManager;
 
-	private JavaMailSender mailSender;
-	
 	@Autowired
-	protected void setJavaMailSender(JavaMailSender mailSender){
-		this.mailSender = mailSender;
-	}
-	
-	@PersistenceContext
-	protected void setEntityManager(EntityManager entityManager){
-		this.entityManager = entityManager;
-	}
+	private JavaMailSender mailSender;
 
 	@Transactional
 	public TodoList getTodoList(String name) {
