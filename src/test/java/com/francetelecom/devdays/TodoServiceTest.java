@@ -8,6 +8,9 @@ import static org.mockito.Mockito.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,19 +32,32 @@ import com.francetelecom.devdays.domain.TodoList;
 @RunWith(MockitoJUnitRunner.class)
 public class TodoServiceTest {
 	/**
-	 * Définition du Mock par annotation {@link Mockito}
+	 * Définition des Mock par annotation {@link Mockito}
 	 * @see Mock
 	 */
 	@Mock
 	private JavaMailSender mailSender;
+	@Mock
+	private EntityManager entityManager;
+	@Mock
+	private Query query;
 	
 	private TodoService todoService;
 	
 	@Before
 	public void init(){
 		todoService = new TodoService();
-		//On met en place le Mock explicitement sur le Service testé
+		//On met en place les Mock explicitement sur le Service testé
 		todoService.setJavaMailSender(mailSender);
+		todoService.setEntityManager(entityManager);
+		
+		//Simulation du comportement de l'entityManager
+		//Si on lui demande de créer une requête il renvoie un Mock
+		when(entityManager.createQuery(anyString())).thenReturn(query);
+		
+		//Simulation du comportement de la requête
+		//Si on lui demande de changer un paramètre elle se renvoie elle même (cohérence du fonctionnement nominal)
+		when(query.setParameter(anyString(), any())).thenReturn(query);
 	}
 
 	@Test

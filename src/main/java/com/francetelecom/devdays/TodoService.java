@@ -2,6 +2,7 @@ package com.francetelecom.devdays;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +19,6 @@ import com.francetelecom.devdays.domain.TodoList;
 @Service
 public class TodoService {
 
-	@PersistenceContext
 	private EntityManager entityManager;
 
 	private JavaMailSender mailSender;
@@ -27,11 +27,16 @@ public class TodoService {
 	protected void setJavaMailSender(JavaMailSender mailSender){
 		this.mailSender = mailSender;
 	}
+	
+	@PersistenceContext
+	protected void setEntityManager(EntityManager entityManager){
+		this.entityManager = entityManager;
+	}
 
 	@Transactional
 	public TodoList getTodoList(String name) {
-		return (TodoList) entityManager.createQuery("from " + TodoList.class.getSimpleName() + " where name=:name").setParameter("name", name)
-				.getSingleResult();
+		Query query = entityManager.createQuery("from " + TodoList.class.getSimpleName() + " where name=:name");
+		return (TodoList) query.setParameter("name", name).getSingleResult();
 	}
 
 	@Transactional
