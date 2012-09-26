@@ -1,6 +1,9 @@
 package com.francetelecom.devdays;
 
 import static junit.framework.Assert.*;
+import static org.mockito.Matchers.*;
+
+import static org.mockito.Mockito.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -8,6 +11,8 @@ import java.util.Date;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -25,9 +30,12 @@ public class TodoServiceTest {
 	
 	@Autowired
 	private TodoService todoService;
+	
+	@Autowired
+	private JavaMailSender mailSender;
 
 	@Test
-	public void testCreateAndReatrieveAFreshTodoList() throws Exception {
+	public void testCreateAndRetrieveAFreshTodoList() throws Exception {
 		TodoList newList = todoService.newList("masuperlistedetrucsafaire", "listowner@test.com");
 		assertNotNull(newList);
 		
@@ -40,6 +48,9 @@ public class TodoServiceTest {
 
 		assertNotNull(list);
 		assertTrue(list.getTodos().contains(newTask));
+		
+		//On vérifie ici que le service a tenté d'envoyer un mail via le javaMailSender
+		verify(mailSender).send(any(SimpleMailMessage.class));
 	}
 
 	
