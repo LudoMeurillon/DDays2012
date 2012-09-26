@@ -19,6 +19,7 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
@@ -49,8 +50,8 @@ public class TodoServiceTest {
 	 * L'injection des mocks dans une instance est prise en compte par Mockito si on le souhaite
 	 * @see InjectMocks
 	 */
-	@InjectMocks
-	private TodoService todoService = new TodoService();
+	@InjectMocks @Spy
+	private TodoService todoService;
 	
 	/**
 	 * Les {@link ArgumentCaptor} permettent de récupérer les valeurs 
@@ -97,6 +98,7 @@ public class TodoServiceTest {
 	 */
 	@Test
 	public void testNewList() throws Exception {
+		doNothing().when(todoService).notifyOwner(anyString(), anyString(), anyString());
 		//Action
 		TodoList newList = todoService.newList("masuperlistedetrucsafaire", "listowner@test.com");
 		

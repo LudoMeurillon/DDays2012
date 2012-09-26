@@ -49,7 +49,7 @@ public class TodoService {
 		return list;
 	}
 
-	private void notifyOwner(String recipient, String title, String content) {
+	protected void notifyOwner(String recipient, String title, String content) {
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setFrom("mockito.devdays2012@orange.com");
 		message.setTo(recipient);
