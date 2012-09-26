@@ -13,13 +13,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.francetelecom.devdays.domain.Task;
 import com.francetelecom.devdays.domain.TodoList;
@@ -29,13 +26,8 @@ import com.francetelecom.devdays.domain.TodoList;
  * 
  * @author Ludovic Meurillon
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"classpath:/applicationContext.xml"})
+@RunWith(MockitoJUnitRunner.class)
 public class TodoServiceTest {
-	
-	@Autowired
-	private TodoService todoService;
-	
 	/**
 	 * Définition du Mock par annotation {@link Mockito}
 	 * @see Mock
@@ -43,10 +35,11 @@ public class TodoServiceTest {
 	@Mock
 	private JavaMailSender mailSender;
 	
+	private TodoService todoService;
+	
 	@Before
 	public void init(){
-		//Création des Mocks et des Spy sur les attributs concernés (ceux qui utilisent @Mock ou @Spy) dans le test actuel.
-		MockitoAnnotations.initMocks(this);
+		todoService = new TodoService();
 		//On met en place le Mock explicitement sur le Service testé
 		todoService.setJavaMailSender(mailSender);
 	}
