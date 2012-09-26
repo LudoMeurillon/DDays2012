@@ -57,7 +57,8 @@
 	<context:annotation-config />
 	<context:component-scan base-package="com.francetelecom.devdays" />
 	
-	<bean id="javaMailSender" class="com.francetelecom.devdays.MockFactory">
-	  <property name="type" value="org.springframework.mail.javamail.JavaMailSender" />
+	<bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+	  <property name="host" value="nimportequoi.ezaf.fr" />
+	  <property name="port" value="514" />
 	</bean>
 </beans>

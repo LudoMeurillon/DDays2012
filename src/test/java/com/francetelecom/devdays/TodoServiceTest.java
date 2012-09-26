@@ -8,8 +8,12 @@ import static org.mockito.Mockito.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -31,8 +35,20 @@ public class TodoServiceTest {
 	@Autowired
 	private TodoService todoService;
 	
-	@Autowired
+	/**
+	 * Définition du Mock par annotation {@link Mockito}
+	 * @see Mock
+	 */
+	@Mock
 	private JavaMailSender mailSender;
+	
+	@Before
+	public void init(){
+		//Création des Mocks et des Spy sur les attributs concernés (ceux qui utilisent @Mock ou @Spy) dans le test actuel.
+		MockitoAnnotations.initMocks(this);
+		//On met en place le Mock explicitement sur le Service testé
+		todoService.setJavaMailSender(mailSender);
+	}
 
 	@Test
 	public void testCreateAndRetrieveAFreshTodoList() throws Exception {
