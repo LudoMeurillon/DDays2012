@@ -59,32 +59,39 @@ public class TodoServiceTest {
 		//Si on lui demande de changer un paramètre elle se renvoie elle même (cohérence du fonctionnement nominal)
 		when(findTodoListQuery.setParameter(eq("name"), any())).thenReturn(findTodoListQuery);
 	}
-
+	
+	/**
+	 * Teste le comportement de la récupération de liste vis à vis de la couche d'accès aux données.
+	 */
 	@Test
-	public void testCreateAndRetrieveAFreshTodoList() throws Exception {
-		TodoList newList = todoService.newList("masuperlistedetrucsafaire", "listowner@test.com");
-		assertNotNull(newList);
-		
+	public void testGetTodoList() throws Exception {
 		//Lorsque la base est intéroggée on retourne la liste
-		when(findTodoListQuery.getSingleResult()).thenReturn(newList);
-		
-		Task newTask = task("Faire les courses","faire les courses hebdo en prenant commande pour le drive", DATE_FORMAT.parse("12/10/2012 19:30"));
-		
-		todoService.addTask(newList.getName(),newTask);
+		TodoList mockList = new TodoList();
+		mockList.setName("masuperlistedetrucsafaire");
+		mockList.setOwnerEmail("listowner@test.com");
+		when(findTodoListQuery.getSingleResult()).thenReturn(mockList);
 		
 		//Action
 		TodoList list = todoService.getTodoList("masuperlistedetrucsafaire");
+		
+		//Tests
+		assertEquals(mockList.getName(), list.getName());
+		verify(findTodoListQuery).setParameter("name", "masuperlistedetrucsafaire");
+		verify(findTodoListQuery).getSingleResult();
+	}
 
-		assertNotNull(list);
-		assertTrue(list.getTodos().contains(newTask));
+	/**
+	 * Teste le comportement de la création d'une nouvelle liste (persistance d'une liste et envoi d'un mail)
+	 */
+	@Test
+	public void testNewList() throws Exception {
+		TodoList newList = todoService.newList("masuperlistedetrucsafaire", "listowner@test.com");
+		assertNotNull(newList);
 		
 		//On vérifie ici que le service a tenté d'envoyer un mail via le javaMailSender
 		verify(mailSender).send(any(SimpleMailMessage.class));
-
-		verify(findTodoListQuery, atLeastOnce()).setParameter("name", "masuperlistedetrucsafaire");
-		verify(findTodoListQuery, atLeastOnce()).getSingleResult();
+		verify(entityManager).persist(newList); //Mockito se base sur le .equals pour valider le passage ici
 	}
-	
 	
 	/**
 	 * Ce test valide que l'on peut créer une todolist même si le serveur de mail n'est pas joignable
@@ -96,16 +103,9 @@ public class TodoServiceTest {
 		
 		TodoList newList = todoService.newList("malisteavecunmailenechec", "listowner@test.com");
 		
-		//Lorsque la base est intéroggée on retourne la liste
-		when(findTodoListQuery.getSingleResult()).thenReturn(newList);
-		
-		TodoList myList = todoService.getTodoList("malisteavecunmailenechec");
-		
-		assertNotNull(myList);
-		assertEquals(newList.getName(),myList.getName());
-		
 		//On vérifie qu'on a tenté d'envoyer un mail (facultatif)
 		verify(mailSender).send(any(SimpleMailMessage.class));
+		verify(entityManager).persist(newList); //On valide ici que le système a tenté de persister l'objet
 	}
 	
 	
