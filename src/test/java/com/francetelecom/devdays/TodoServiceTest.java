@@ -80,6 +80,9 @@ public class TodoServiceTest {
 		
 		//On vérifie ici que le service a tenté d'envoyer un mail via le javaMailSender
 		verify(mailSender).send(any(SimpleMailMessage.class));
+
+		verify(findTodoListQuery).setParameter("name", "erreur"); //Fail !!
+		verify(findTodoListQuery).getSingleResult();
 	}
 	
 	
