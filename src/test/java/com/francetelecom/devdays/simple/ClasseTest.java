@@ -2,14 +2,12 @@ package com.francetelecom.devdays.simple;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.Map;
-
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 public class ClasseTest {
 	
@@ -18,7 +16,7 @@ public class ClasseTest {
 	@Before
 	public void init(){
 		ducobu = mock(Eleve.class,"mock ducobu");
-		when(ducobu.prenom()).thenReturn("monsieur");
+		given(ducobu.prenom()).willReturn("monsieur");
 		when(ducobu.nom()).thenReturn("ducobu");
 		when(ducobu.present()).thenReturn(false);
 	}

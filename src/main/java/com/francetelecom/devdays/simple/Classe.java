@@ -16,14 +16,22 @@ public class Classe {
 		this.capacite = capacite;
 	}
 	
-	public void nouveauxEleves(Eleve...eleves){
-		this.eleves.addAll(Arrays.asList(eleves));
+	public void nouvelEleve(String prenom, String nom){
+		if(resteDesPlaces()){
+			Enfant enfant = new Enfant(prenom, nom);
+			nouvelEleve(enfant);
+		}else{
+			throw new PlusDePlaceException(this);
+		}
+	}
+	
+	public void nouvelEleve(Eleve eleve){
+		this.eleves.add(eleve);
 	}
 	
 	public boolean resteDesPlaces(){
 		return capacite() > effectifs();
 	}
-	
 	
 	public boolean surchargee(){
 		return capacite() < effectifs();

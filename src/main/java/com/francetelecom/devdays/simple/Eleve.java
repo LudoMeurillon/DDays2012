@@ -7,4 +7,6 @@ public interface Eleve {
 	String prenom();
 	
 	String nom();
+	
+	String toString();
 }

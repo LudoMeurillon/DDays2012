@@ -135,14 +135,4 @@ public class TodoServiceTest {
 		verify(entityManager).persist(newList); //On valide ici que le système a tenté de persister l'objet
 	}
 	
-	private static final SimpleDateFormat DATE_FORMAT	= new SimpleDateFormat("dd/MM/yyyy HH:mm");
-	
-	private static final Task task(String name, String description, Date limit){
-		Task task = new Task();
-		task.setName(name);
-		task.setDescription(description);
-		task.setDeadline(limit);
-		return task;
-	}
-	
 }
