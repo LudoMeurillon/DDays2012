@@ -61,4 +61,6 @@
 		<property name="host" value="smtp.test.com"></property>
 		<property name="port" value="549"></property>
 	</bean>
+	
+	<!-- Etape 1 - Replacer le bean précédant par un mock Mockito -->
 </beans>

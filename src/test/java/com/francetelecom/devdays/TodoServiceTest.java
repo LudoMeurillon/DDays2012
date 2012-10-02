@@ -53,4 +53,12 @@ public class TodoServiceTest {
 		return task;
 	}
 	
+	/*
+	 * 1 - On peut éviter l'exception générée par le mail en déclarant un mock dans le contexte Spring
+	 * 
+	 * 2 - On peut injecter le mock depuis le Test en créant un Setter
+	 * 
+	 * 3 - On remplace le context Spring et le test "intégré" par des tests focalisés sur l'API du Service
+	 */
+	
 }
