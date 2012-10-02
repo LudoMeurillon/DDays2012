@@ -13,9 +13,11 @@ import static org.mockito.Mockito.verify;
 
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
+@Ignore
 public class ArgumentMatcherAndCaptorTests {
 
 	@Test

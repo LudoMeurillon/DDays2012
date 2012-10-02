@@ -9,12 +9,14 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.stubbing.answers.ReturnsElementsOf;
 
+@Ignore
 public class MockAndSpyTests {
 
 	/**

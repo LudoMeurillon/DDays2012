@@ -3,6 +3,7 @@ package com.francetelecom.devdays.simple;
 import static junit.framework.Assert.assertNotNull;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runner.Runner;
@@ -18,6 +19,7 @@ import org.mockito.runners.MockitoJUnitRunner;
  * On peut aussi utiliser {@link MockitoAnnotations#initMocks(Object)} sur l'instance de classe de test
  * dans un bloc {@link Before} 
  */
+@Ignore
 @RunWith(MockitoJUnitRunner.class)
 public class AnnotationsTests {
 
