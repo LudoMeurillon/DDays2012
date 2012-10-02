@@ -1,12 +1,17 @@
 package com.francetelecom.devdays;
 
-import static junit.framework.Assert.*;
-import static org.mockito.Matchers.*;
-
-import static org.mockito.Mockito.*;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.contains;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.matches;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -25,7 +30,6 @@ import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
-import com.francetelecom.devdays.domain.Task;
 import com.francetelecom.devdays.domain.TodoList;
 
 /**

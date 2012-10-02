@@ -7,11 +7,13 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
+
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.Spy;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
+import org.mockito.internal.stubbing.answers.Returns;
+import org.mockito.stubbing.answers.ReturnsElementsOf;
 
 public class MockAndSpyTests {
 
@@ -34,15 +36,17 @@ public class MockAndSpyTests {
 
 	@Test
 	public void testMockWithDefaultSettings() throws Exception {
-		Eleve eleve = Mockito.mock(Eleve.class,new Answer<String>() {
-			@Override
-			public String answer(InvocationOnMock invocation) throws Throwable {
-				//On peut ici manipuler l'appel au mock pour retourner 
-				//des valeurs différentes selon les cas
-				return "chaineParDefaut";
-			}
-		});
+		Eleve eleve = Mockito.mock(Eleve.class,new Returns("chaineParDefaut")) ;
 		assertEquals("chaineParDefaut",eleve.prenom());
+
+		eleve = Mockito.mock(Eleve.class,new ReturnsElementsOf(Arrays.asList("chaineParDefaut","test2","test3")));
+		assertEquals("chaineParDefaut",eleve.prenom());
+		assertEquals("test2",eleve.prenom());
+		assertEquals("test3",eleve.prenom());
+		assertEquals("test3",eleve.prenom());
+		assertEquals("test3",eleve.prenom());
+		assertEquals("test3",eleve.prenom());
+		assertEquals("test3",eleve.prenom());
 	}
 	
 	/**
